@@ -1,0 +1,28 @@
+name: Temporary UK ETS public report retrieval
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  retrieve:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download UK ETS public report pages
+        run: |
+          mkdir -p ukets
+          base='https://reports.view-emissions-trading-registry.service.gov.uk'
+          curl -fL "$base/ets-reports.html" -o ukets/ets-reports.html
+          for i in 1 2 3 4 5 6 7; do
+            curl -fL "$base/ets-reports/section${i}/section${i}.html" -o "ukets/section${i}.html"
+          done
+          grep -rhoE 'href="[^"]+"' ukets | sed 's/^href="//;s/"$//' | sort -u > ukets/links.txt
+          cat ukets/links.txt
+      - name: Upload pages
+        uses: actions/upload-artifact@v4
+        with:
+          name: uk-ets-report-pages
+          path: ukets
