@@ -11,7 +11,7 @@ jobs:
   retrieve:
     runs-on: ubuntu-latest
     steps:
-      - name: Download UK ETS public report pages
+      - name: Download UK ETS public report pages and data files
         run: |
           mkdir -p ukets
           base='https://reports.view-emissions-trading-registry.service.gov.uk'
@@ -20,9 +20,11 @@ jobs:
             curl -fL "$base/ets-reports/section${i}/section${i}.html" -o "ukets/section${i}.html"
           done
           grep -rhoE 'href="[^"]+"' ukets | sed 's/^href="//;s/"$//' | sort -u > ukets/links.txt
-          cat ukets/links.txt
-      - name: Upload pages
+          curl -fL "$base/ets-reports/section5/UK_ETS_Compliance_Report_Emissions_%26_Surrenders_2026.xlsx" -o ukets/UK_ETS_Compliance_Report_Emissions_Surrenders_2026.xlsx
+          curl -fL "$base/ets-reports/section1/uk_ets_Standard_Report_OHA_Participants_Allocations_2025_20260715010000000.xlsx" -o ukets/UK_ETS_OHA_Allocations_2025.xlsx
+          ls -lh ukets
+      - name: Upload reports
         uses: actions/upload-artifact@v4
         with:
-          name: uk-ets-report-pages
+          name: uk-ets-cement-source-files
           path: ukets
