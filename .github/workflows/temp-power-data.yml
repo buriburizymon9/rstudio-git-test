@@ -11,14 +11,15 @@ jobs:
   retrieve:
     runs-on: ubuntu-latest
     steps:
-      - name: Download public electricity dataset
+      - name: Download public electricity and carbon-price datasets
         run: |
           mkdir -p power-data
           curl -fL 'https://raw.githubusercontent.com/owid/energy-data/master/owid-energy-data.csv' -o power-data/owid-energy-data.csv
           curl -fL 'https://raw.githubusercontent.com/owid/energy-data/master/owid-energy-codebook.csv' -o power-data/owid-energy-codebook.csv
+          curl -fL 'https://public-test.eex-group.com/eex/eua-auction-report/emission-spot-primary-market-auction-report-2025-data.xlsx' -o power-data/eex-eua-auction-2025.xlsx
           ls -lh power-data
       - name: Upload files
         uses: actions/upload-artifact@v4
         with:
-          name: power-public-data
+          name: power-public-data-with-eua
           path: power-data
