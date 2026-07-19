@@ -16,10 +16,10 @@ jobs:
           mkdir -p power-data
           curl -fL 'https://raw.githubusercontent.com/owid/energy-data/master/owid-energy-data.csv' -o power-data/owid-energy-data.csv
           curl -fL 'https://raw.githubusercontent.com/owid/energy-data/master/owid-energy-codebook.csv' -o power-data/owid-energy-codebook.csv
-          curl -fL 'https://public-test.eex-group.com/eex/eua-auction-report/emission-spot-primary-market-auction-report-2025-data.xlsx' -o power-data/eex-eua-auction-2025.xlsx
+          curl -fL 'https://www.eex.com/fileadmin/EEX/Downloads/EUA_Emission_Spot_Primary_Market_Auction_Report/Archive_Reports/emission-spot-primary-market-auction-report-2012-2025-data.zip' -o power-data/eex-auction-history-2012-2025.zip
           ls -lh power-data
       - name: Upload files
         uses: actions/upload-artifact@v4
         with:
-          name: power-public-data-with-eua
+          name: power-public-data-final
           path: power-data
